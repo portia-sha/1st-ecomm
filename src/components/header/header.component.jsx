@@ -2,14 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // connect also a higher order function
 import { connect } from 'react-redux';
-
 import { auth } from '../../firebase/firebase.utils';
 
-import { ReactComponent as Logo } from '../../assets/crown.svg';
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropDown from '../cart-dropdown/cart-dropdown.component';
 
+import { ReactComponent as Logo } from '../../assets/crown.svg';
 import '../header/header.styles.scss';
 
-const Header = ({ currentUser }) => (
+const Header = ({ currentUser, hidden }) => (
   //  first is to store logo
   <div className='header'>
     <Link className='logo-contianer' to='/'>
@@ -32,13 +33,16 @@ const Header = ({ currentUser }) => (
           SIGN IN
         </Link>
       )}
+      <CartIcon />
     </div>
+    {hidden ? null : <CartDropDown />}
   </div>
 );
 
-// state here is the root reducer
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
+// destructor inside
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+  currentUser,
+  hidden,
 });
 
 // Now we can access the currentUser by Header itself thanks to reducer, mapStateToProps and connect, and use it in the beginning
