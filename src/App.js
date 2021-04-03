@@ -1,29 +1,67 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import HomePage from "./pages/homepage/homepage.component";
-import ShopPage from "./pages/shop/shoppage.component";
-import Header from "./components/header/header.component";
-import SignInAndSignUp from "./pages/signin-and-signup/signin-and-signup.component";
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
-import "./App.css";
+import './App.css';
 
-function App() {
-  return (
-    <div>
-      <Header />
-      {/* 
-      exact: means that the router will find the entire not partial matches url for the pages and render. without exact, it may render multiple components that will match the url!
-      '/': localhosts:3000/
-      Switch component function: as long as switch found the path mactched, it will render the first match route and nothing else will render 
-      Therefore in here, with Switch and exact, the homepage will only render with / path anf nothing else*/}
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/shop" component={ShopPage} />
-        <Route path="/signin" component={SignInAndSignUp} />
-      </Switch>
-    </div>
-  );
+import HomePage from './pages/homepage/homepage.component';
+import ShopPage from './pages/shop/shoppage.component';
+import Header from './components/header/header.component';
+import { setCurrentUser } from './redux/user/user.action';
+import SignInAndSignUpPage from './pages/signin-and-signup/signin-and-signup.component';
+
+class App extends React.Component {
+  unsubscribeFromAuth = null;
+
+  componentDidMount() {
+    const { setCurrentUser } = this.props;
+
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot((snapShot) => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
+      }
+
+      setCurrentUser(userAuth);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+  render() {
+    return (
+      <div>
+        <Header />
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/shop' component={ShopPage} />
+          <Route
+            exact
+            path='/signin'
+            render={() =>
+              this.props.currentUser ? (
+                <Redirect to='/' />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            }
+          />
+        </Switch>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+export default connect(null, mapDispatchToProps)(App);
