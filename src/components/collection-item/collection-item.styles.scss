@@ -4,6 +4,7 @@
   flex-direction: column;
   height: 350px;
   align-items: center;
+  position: relative;
 
   // 图片占比95
   .image {
@@ -13,6 +14,24 @@
     background-position: center;
     margin-bottom: 5px;
   }
+
+  .custom-button {
+    width: 80%;
+    opacity: 0.7;
+    position: absolute;
+    top: 255px;
+    display: none;
+  }
+  &:hover {
+    image {
+      opacity: 0.8;
+    }
+    .custom-button {
+      opacity: 0.85;
+      display: flex;
+    }
+  }
+
   // footer 占比5
   .collection-footer {
     width: 100%;
