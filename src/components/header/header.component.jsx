@@ -37,7 +37,6 @@ const Header = ({ currentUser }) => (
 );
 
 // state here is the root reducer
-// Since we want the assign the state user value to here.
 const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
 });

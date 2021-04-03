@@ -2,15 +2,16 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-
 import './App.css';
+
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shoppage.component';
-import Header from './components/header/header.component';
-import { setCurrentUser } from './redux/user/user.action';
 import SignInAndSignUpPage from './pages/signin-and-signup/signin-and-signup.component';
+import Header from './components/header/header.component';
+
+import { setCurrentUser } from './redux/user/user.action';
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
@@ -47,7 +48,9 @@ class App extends React.Component {
           <Route
             exact
             path='/signin'
+            // render here is render 指定位置出的component？
             render={() =>
+              // why use this.props
               this.props.currentUser ? (
                 <Redirect to='/' />
               ) : (
@@ -61,7 +64,11 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
