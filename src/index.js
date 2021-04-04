@@ -14,9 +14,9 @@ ReactDOM.render(
   // Pass store to provider that anything below can access redux
   <Provider store={store}>
     <BrowserRouter>
-      {/* <PersistGate persistor={persistor}> */}
-      <App />
-      {/* </PersistGate> */}
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

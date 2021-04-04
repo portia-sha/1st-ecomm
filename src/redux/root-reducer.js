@@ -13,7 +13,7 @@ const persistConfig = {
   key: 'root',
   storage,
   // Store the string name from reducer that we wanna store
-  whitelist: [],
+  whitelist: ['cart'],
 };
 
 const rootReducer = combineReducers({
