@@ -1,23 +1,32 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import './App.css';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import {
+  auth,
+  createUserProfileDocument,
+  addCollectionAndDocuments,
+} from './firebase/firebase.utils';
+
+import Header from './components/header/header.component';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shoppage.component';
+import CheckoutPage from './pages/checkout/checkout.component';
 import SignInAndSignUpPage from './pages/signin-and-signup/signin-and-signup.component';
-import Header from './components/header/header.component';
 
 import { setCurrentUser } from './redux/user/user.action';
+import { selectCurrentUser } from './redux/user/user.selector';
+import { selectCollectionsForPreview } from './redux/shop/shop.selector';
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionsArray } = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -32,6 +41,8 @@ class App extends React.Component {
       }
 
       setCurrentUser(userAuth);
+      // console.log(collectionsArray);
+      addCollectionAndDocuments('collections', collectionsArray);
     });
   }
 
@@ -45,6 +56,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
+          <Route exact path='/checkout' component={CheckoutPage} />
           <Route
             exact
             path='/signin'
@@ -64,8 +76,9 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionsForPreview,
 });
 
 const mapDispatchToProps = (dispatch) => ({

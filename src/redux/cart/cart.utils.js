@@ -19,3 +19,19 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
 };
 
 // quantity property will get attached to each cartitem when nre item add in first time, then it can be referencing by item and its subset
+
+export const deleteItemFromCart = (cartItems, cartItemToDelete) => {
+  const existingCartItem = cartItems.find(
+    (cartItem) => cartItem.id === cartItemToDelete.id
+  );
+  console.log(existingCartItem);
+
+  if (existingCartItem.quantity === 1) {
+    return cartItems.filter((cartItem) => cartItem.id !== cartItemToDelete.id);
+  }
+  return cartItems.map((cartItem) =>
+    cartItem.id === cartItemToDelete.id
+      ? { ...cartItem, quantity: cartItem.quantity - 1 }
+      : cartItem
+  );
+};

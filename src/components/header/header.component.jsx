@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // connect also a higher order function
 import { connect } from 'react-redux';
-import { auth } from '../../firebase/firebase.utils';
+import { createStructuredSelector } from 'reselect';
 
+import { auth } from '../../firebase/firebase.utils';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropDown from '../cart-dropdown/cart-dropdown.component';
+import { selectCartHidden } from '../../redux/cart/cart.selector';
+import { selectCurrentUser } from '../../redux/user/user.selector';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
@@ -39,10 +42,9 @@ const Header = ({ currentUser, hidden }) => (
   </HeaderContainer>
 );
 
-// destructor inside
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  currentUser,
-  hidden,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
 });
 
 // Now we can access the currentUser by Header itself thanks to reducer, mapStateToProps and connect, and use it in the beginning

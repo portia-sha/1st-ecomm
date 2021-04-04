@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import '../collection-item/collection-item.styles.scss';
-
-import CustomButton from '../custom-button/custom-button.component';
 import { addItem } from '../../redux/cart/cart.action';
+
+import {
+  CollectionItemContainer,
+  CollectionFooterContainer,
+  AddButton,
+  BackgroundImage,
+  NameContainer,
+  PriceContainer,
+} from './collection-item.styles';
 
 // 这里的四个props都是item array的props了 注意！
 // tthe reason why switch 4 props to whole item is because we need item to trigger the addItem action
@@ -12,21 +18,21 @@ const CollectionItem = ({ item, addItem }) => {
   const { name, price, imageUrl } = item;
 
   return (
-    <div className='collection-item'>
-      <div
+    <CollectionItemContainer>
+      <BackgroundImage
         className='image'
         style={{
           backgroundImage: `url(${imageUrl})`,
         }}
       />
-      <div className='collection-footer'>
-        <span className='name'>{name}</span>
-        <span className='price'>{price}</span>
-      </div>
-      <CustomButton inverted onClick={() => addItem(item)}>
-        ADD TO CART
-      </CustomButton>
-    </div>
+      <CollectionFooterContainer className='collection-footer'>
+        <NameContainer>{name}</NameContainer>
+        <PriceContainer>{price}</PriceContainer>
+      </CollectionFooterContainer>
+      <AddButton onClick={() => addItem(item)} inverted>
+        Add to cart
+      </AddButton>
+    </CollectionItemContainer>
   );
 };
 
