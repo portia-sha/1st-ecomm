@@ -42,7 +42,10 @@ class App extends React.Component {
 
       setCurrentUser(userAuth);
       // console.log(collectionsArray);
-      addCollectionAndDocuments('collections', collectionsArray);
+      // addCollectionAndDocuments(
+      //   'collections',
+      //   collectionsArray.map(({ title, items }) => ({ title, items }))
+      // );
     });
   }
 
@@ -78,7 +81,7 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
-  collectionsArray: selectCollectionsForPreview,
+  // collectionsArray: selectCollectionsForPreview,
 });
 
 const mapDispatchToProps = (dispatch) => ({

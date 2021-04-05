@@ -61,6 +61,26 @@ export const addCollectionAndDocuments = async (
   return await batch.commit();
 };
 
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
+  });
+
+  // here we need convert the array we make to transform and store in the reducer
+  // 这是把每个collection的value Assign给collection的title吗
+  // 那collection又是什么呢？collections是
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {});
+};
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 

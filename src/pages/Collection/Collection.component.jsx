@@ -7,8 +7,8 @@ import { selectCollection } from '../../redux/shop/shop.selector';
 
 import '../collection/collection.styles.scss';
 
-const CollectionPage = ({ state, collection }) => {
-  console.log(state);
+const CollectionPage = ({ collection }) => {
+  // the reason why we got null from collection is when we move datebase to back-end, get data takes time, which means is asynchronous, when the time app doesn't get data, it will return this. To solve this problems, we need Using Spinner.
   const { title, items } = collection;
   return (
     <div className='collection-page'>

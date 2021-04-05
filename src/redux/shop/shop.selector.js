@@ -11,13 +11,10 @@ export const selectCollections = createSelector(
 export const selectCollectionsForPreview = createSelector(
   [selectCollections],
   (collections) =>
-    // the Object.keys return the all the keys(not value)in an object as an array
     collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
 
-export const selectCollection = memoize((collectionUrlParam) =>
-  createSelector(
-    [selectCollections],
-    (collections) => collections[collectionUrlParam]
-  )
-);
+export const selectCollection = (collectionUrlParam) =>
+  createSelector([selectCollections], (collections) =>
+    collections ? collections[collectionUrlParam] : null
+  );
