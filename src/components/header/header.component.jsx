@@ -9,6 +9,7 @@ import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropDown from '../cart-dropdown/cart-dropdown.component';
 import { selectCartHidden } from '../../redux/cart/cart.selector';
 import { selectCurrentUser } from '../../redux/user/user.selector';
+import { signOutStart } from '../../redux/user/user.action';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
@@ -19,7 +20,7 @@ import {
   OptionLink,
 } from './header.styles';
 
-const Header = ({ currentUser, hidden }) => (
+const Header = ({ currentUser, hidden, signOutStart }) => (
   //  first is to store logo
   <HeaderContainer>
     <LogoContainer to='/'>
@@ -30,7 +31,7 @@ const Header = ({ currentUser, hidden }) => (
       <OptionLink to='/shop'>SHOP</OptionLink>
       <OptionLink to='/shop'>CONTACT</OptionLink>
       {currentUser ? (
-        <OptionLink as='div' onClick={() => auth.signOut()}>
+        <OptionLink as='div' onClick={signOutStart}>
           SIGN OUT
         </OptionLink>
       ) : (
@@ -46,6 +47,9 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
   hidden: selectCartHidden,
 });
+const mapDisptachToProps = (dispatch) => ({
+  signOutStart: () => dispatch(signOutStart()),
+});
 
 // Now we can access the currentUser by Header itself thanks to reducer, mapStateToProps and connect, and use it in the beginning
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDisptachToProps)(Header);

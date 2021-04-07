@@ -9,7 +9,10 @@ import '../collection-preview/collection-preview.styles.scss';
 // Note here, title and items 同是 state第一级props, 就是 hats shoes 那五大类东西和这五类东西包含的item array
 const CollectionPreview = ({ title, items, history }) => (
   <div className='collection-preview'>
-    <h1 className='title' onClick={() => history.push(`/${title}`)}>
+    <h1
+      className='title'
+      onClick={() => history.push(`/shop/${title.toLowerCase()}`)}
+    >
       {title.toUpperCase()}
     </h1>
     <div className='preview'>
